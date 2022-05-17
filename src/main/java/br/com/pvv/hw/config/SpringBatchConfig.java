@@ -42,29 +42,35 @@ public class SpringBatchConfig {
 		itemReader.setResource(new FileSystemResource("src/main/resources/data.csv"));
 		itemReader.setName("csvReader");
 		itemReader.setLinesToSkip(1);
-		itemReader.setLineMapper(lineMapper());
+		itemReader.setLineMapper(new DefaultLineMapper<Pessoa>() {{
+			setLineTokenizer(new DelimitedLineTokenizer() {{
+				setNames("id", "nome", "cidade", "estado", "cep", "aniv", "emprego");
+				setDelimiter(";");
+			}});
+			setFieldSetMapper(new EmployeeFileRowMapper());
+		}});
 		return itemReader;
 	}
 
-	private LineMapper<Pessoa> lineMapper() {
-		DefaultLineMapper<Pessoa> lineMapper = new DefaultLineMapper<>();
+	// private LineMapper<Pessoa> lineMapper() {
+	// 	DefaultLineMapper<Pessoa> lineMapper = new DefaultLineMapper<>();
 
-		DelimitedLineTokenizer delimitedLineTokenizer = new DelimitedLineTokenizer();
-		delimitedLineTokenizer.setDelimiter(";");
-		// delimitedLineTokenizer.setDelimiter(",");
+	// 	// DelimitedLineTokenizer delimitedLineTokenizer = new DelimitedLineTokenizer();
+	// 	// delimitedLineTokenizer.setDelimiter(";");
+	// 	// // delimitedLineTokenizer.setDelimiter(",");
 		
-		delimitedLineTokenizer.setStrict(false);
-		// delimitedLineTokenizer.setNames("id","firstName","lastName","email","gender","contactNo","country","dob");
-		delimitedLineTokenizer.setNames("id", "nome", "cidade", "estado", "cep", "aniv", "emprego");
+	// 	// delimitedLineTokenizer.setStrict(false);
+	// 	// // delimitedLineTokenizer.setNames("id","firstName","lastName","email","gender","contactNo","country","dob");
+	// 	// delimitedLineTokenizer.setNames("id", "nome", "cidade", "estado", "cep", "aniv", "emprego");
 
-		BeanWrapperFieldSetMapper<Pessoa> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
-		fieldSetMapper.setTargetType(Pessoa.class);
+	// 	BeanWrapperFieldSetMapper<Pessoa> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
+	// 	fieldSetMapper.setTargetType(Pessoa.class);
 
-		lineMapper.setFieldSetMapper(fieldSetMapper);
-		lineMapper.setLineTokenizer(delimitedLineTokenizer);
+	// 	lineMapper.setFieldSetMapper(fieldSetMapper);
+	// 	lineMapper.setLineTokenizer(delimitedLineTokenizer);
 
-		return lineMapper;
-	}
+	// 	return lineMapper;
+	// }
 
 	@Bean
 	public PessoaProcessor processor() {
