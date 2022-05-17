@@ -10,4 +10,6 @@ public class HelloSpring1Application {
 		SpringApplication.run(HelloSpring1Application.class, args);
 	}
 
+	
+	// https://www.youtube.com/watch?v=hr2XTbKSdAQ&t=628s
 }
